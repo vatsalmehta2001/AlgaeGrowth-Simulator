@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Simulation Core
 
-- [ ] **SIM-01**: Implement Monod growth equations with conservative field-validated parameters (6-10 g/m2/day baseline)
-- [ ] **SIM-02**: Implement Beer-Lambert light attenuation calculations for depth-averaged growth rate
+- [x] **SIM-01**: Implement Monod growth equations with conservative field-validated parameters (6-10 g/m2/day baseline)
+- [x] **SIM-02**: Implement Beer-Lambert light attenuation calculations for depth-averaged growth rate
 - [ ] **SIM-03**: Implement temperature-dependent growth modifier including >35C inhibition (culture crash)
 - [ ] **SIM-04**: Calculate CO2 capture using species-specific conversion factors with cited sources
 
@@ -93,8 +93,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SIM-01 | Phase 1 | Pending |
-| SIM-02 | Phase 1 | Pending |
+| SIM-01 | Phase 1 | Complete |
+| SIM-02 | Phase 1 | Complete |
 | SIM-03 | Phase 2 | Pending |
 | SIM-04 | Phase 3 | Pending |
 | CLIM-01 | Phase 2 | Pending |

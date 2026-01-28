@@ -12,7 +12,7 @@ This roadmap delivers a Python/Streamlit web application that simulates algae gr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Core Model** - Monod equations, Beer-Lambert, conservative parameters
+- [x] **Phase 1: Foundation & Core Model** - Monod equations, Beer-Lambert, conservative parameters
 - [ ] **Phase 2: Surat Climate Integration** - Temperature inhibition, seasonal modeling, monsoon effects
 - [ ] **Phase 3: Simulation Engine & CO2 Calculation** - ODE solver, time-series, CO2 conversion
 - [ ] **Phase 4: Streamlit UI (Inputs)** - Parameter forms, user overrides, session state
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Project scaffolding, frozen parameter dataclasses, YAML config with citations, validated loader
-- [ ] 01-02-PLAN.md -- Beer-Lambert light attenuation and depth-averaged irradiance (TDD)
-- [ ] 01-03-PLAN.md -- Monod growth kinetics with Steele photoinhibition and integration tests (TDD)
+- [x] 01-01-PLAN.md -- Project scaffolding, frozen parameter dataclasses, YAML config with citations, validated loader
+- [x] 01-02-PLAN.md -- Beer-Lambert light attenuation and depth-averaged irradiance (TDD)
+- [x] 01-03-PLAN.md -- Monod growth kinetics with Steele photoinhibition and integration tests (TDD)
 
 ### Phase 2: Surat Climate Integration
 **Goal**: Model Surat's extreme climate (40C+ pre-monsoon, 359mm monsoon rainfall) with temperature-dependent growth inhibition
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Core Model | 0/3 | Planned | - |
+| 1. Foundation & Core Model | 3/3 | Complete | 2026-01-28 |
 | 2. Surat Climate Integration | 0/TBD | Not started | - |
 | 3. Simulation Engine & CO2 | 0/TBD | Not started | - |
 | 4. Streamlit UI (Inputs) | 0/TBD | Not started | - |
