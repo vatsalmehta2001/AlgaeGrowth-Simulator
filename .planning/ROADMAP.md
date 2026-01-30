@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Core Model** - Monod equations, Beer-Lambert, conservative parameters
 - [x] **Phase 2: Surat Climate Integration** - Temperature inhibition, seasonal modeling, monsoon effects
-- [ ] **Phase 3: Simulation Engine & CO2 Calculation** - ODE solver, time-series, CO2 conversion
+- [x] **Phase 3: Simulation Engine & CO2 Calculation** - ODE solver, time-series, CO2 conversion
 - [ ] **Phase 4: Streamlit UI (Inputs)** - Parameter forms, user overrides, session state
 - [ ] **Phase 5: Visualization & Export** - Interactive charts, CSV/JSON export, deployment
 - [ ] **Phase 6: Carbon Credit Context** - Methodology transparency, disclaimers, credibility
@@ -63,11 +63,11 @@ Plans:
   2. CO2 capture output uses species-specific conversion factors with cited sources (not magic 1.88 constant)
   3. SimulationResults dataclass contains biomass time series, CO2 accumulation, and summary statistics
   4. Output values are realistic for Surat conditions (integration tests verify ranges)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [x] 03-01-PLAN.md -- Simulation engine with Euler stepping, harvest cycling, CO2 accounting, and SimulationConfig/Result dataclasses (TDD)
+- [x] 03-02-PLAN.md -- End-to-end integration tests for 365-day Surat simulation with realistic range validation
 
 ### Phase 4: Streamlit UI (Inputs)
 **Goal**: Enable users to configure simulation parameters with sensible Surat defaults and validation
@@ -80,12 +80,11 @@ Plans:
   4. User can specify simulation duration in days or months
   5. User can set initial biomass concentration and CO2 injection rate
   6. Form submission triggers cached simulation run (no re-computation on UI interaction)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
-- [ ] 04-03: TBD
+- [ ] 04-01-PLAN.md -- Dependencies, UI defaults/validation, sidebar with climate/pond/simulation input sections
+- [ ] 04-02-PLAN.md -- Results display, app entry point with cached simulation, human verification
 
 ### Phase 5: Visualization & Export
 **Goal**: Display simulation results with interactive charts and enable data export for verification workflows
@@ -127,8 +126,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Model | 3/3 | Complete | 2026-01-28 |
 | 2. Surat Climate Integration | 3/3 | Complete | 2026-01-30 |
-| 3. Simulation Engine & CO2 | 0/TBD | Not started | - |
-| 4. Streamlit UI (Inputs) | 0/TBD | Not started | - |
+| 3. Simulation Engine & CO2 | 2/2 | Complete | 2026-01-30 |
+| 4. Streamlit UI (Inputs) | 0/2 | In Progress | - |
 | 5. Visualization & Export | 0/TBD | Not started | - |
 | 6. Carbon Credit Context | 0/TBD | Not started | - |
 
