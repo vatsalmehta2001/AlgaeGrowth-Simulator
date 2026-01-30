@@ -158,3 +158,33 @@ class CityClimate:
 
     months: tuple[MonthlyClimate, ...]
     """Twelve months of climate data (Jan-Dec). Tuple for hashability."""
+
+
+@dataclass(frozen=True)
+class SimulationConfig:
+    """User-configurable simulation parameters.
+
+    Frozen and hashable for Streamlit caching. All fields have sensible
+    defaults for Surat open-pond Chlorella vulgaris cultivation.
+    """
+
+    duration_days: int
+    """Simulation duration [days]. Range: 1-365."""
+
+    start_month: int
+    """Starting calendar month [1-12]. January=1, December=12."""
+
+    initial_biomass: float
+    """Initial biomass concentration [g/L]. Default: 0.5 (typical inoculation)."""
+
+    harvest_threshold: float
+    """Biomass concentration triggering harvest [g/L]. Default: 2.0."""
+
+    co2_concentration: float
+    """Dissolved CO2 concentration [mg/L]. Default: 5.0 (continuous injection)."""
+
+    depth: float
+    """Pond depth [m]. Default: 0.3 (typical raceway)."""
+
+    surface_area: float
+    """Pond or reactor surface area [m2]. Default: 100.0."""
