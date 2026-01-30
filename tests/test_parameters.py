@@ -128,6 +128,18 @@ class TestHashability:
             co2_captured_cumulative=(0.0, 9.15),
             warnings=(),
             parameters_used=params,
+            co2_captured_daily=(0.0, 0.01),
+            growth_rate_daily=(0.0, 0.02),
+            harvest_days=(),
+            total_co2_captured_kg=0.01,
+            total_co2_captured_tco2e=0.00001,
+            total_biomass_harvested_kg=0.0,
+            harvest_count=0,
+            avg_daily_productivity=2.5,
+            duration_days=2,
+            start_month=1,
+            seasonal_co2=(0.01, 0.0, 0.0),
+            seasonal_productivity=(2.5, 0.0, 0.0),
         )
         assert isinstance(hash(result), int)
 
@@ -312,6 +324,18 @@ class TestSimulationResult:
             co2_captured_cumulative=(0.0, 9.15, 23.79),
             warnings=(),
             parameters_used=params,
+            co2_captured_daily=(0.0, 0.01, 0.02),
+            growth_rate_daily=(0.0, 0.02, 0.03),
+            harvest_days=(),
+            total_co2_captured_kg=0.03,
+            total_co2_captured_tco2e=0.00003,
+            total_biomass_harvested_kg=0.0,
+            harvest_count=0,
+            avg_daily_productivity=4.33,
+            duration_days=3,
+            start_month=1,
+            seasonal_co2=(0.03, 0.0, 0.0),
+            seasonal_productivity=(4.33, 0.0, 0.0),
         )
         assert result.peak_productivity == 8.0
 
@@ -324,5 +348,17 @@ class TestSimulationResult:
             co2_captured_cumulative=(),
             warnings=(),
             parameters_used=params,
+            co2_captured_daily=(),
+            growth_rate_daily=(),
+            harvest_days=(),
+            total_co2_captured_kg=0.0,
+            total_co2_captured_tco2e=0.0,
+            total_biomass_harvested_kg=0.0,
+            harvest_count=0,
+            avg_daily_productivity=0.0,
+            duration_days=0,
+            start_month=1,
+            seasonal_co2=(0.0, 0.0, 0.0),
+            seasonal_productivity=(0.0, 0.0, 0.0),
         )
         assert result.peak_productivity == 0.0

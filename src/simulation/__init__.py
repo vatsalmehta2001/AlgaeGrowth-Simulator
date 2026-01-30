@@ -15,6 +15,21 @@ __all__ = [
     "depth_averaged_growth_rate",
     "depth_averaged_irradiance",
     "monod_co2_response",
+    "run_simulation",
     "specific_growth_rate",
     "steele_light_response",
 ]
+
+
+def __getattr__(name: str):
+    """Lazy import for run_simulation to avoid circular dependency.
+
+    engine.py imports from src.climate.growth_modifier which imports
+    from src.simulation.growth -- creating a circular chain if engine
+    is eagerly imported at package level.
+    """
+    if name == "run_simulation":
+        from src.simulation.engine import run_simulation
+
+        return run_simulation
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
