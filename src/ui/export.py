@@ -1,0 +1,176 @@
+"""Data export module for the AlgaeGrowth Simulator.
+
+Prepares simulation results as CSV and JSON strings for download.
+CSV includes #-prefixed metadata headers compatible with
+pd.read_csv(comment='#'). JSON uses a nested structure with
+metadata, summary, and daily_data sections.
+
+No pandas dependency -- uses only stdlib io, csv, json.
+"""
+
+import csv
+import io
+import json
+
+from src.models.parameters import SimulationConfig
+from src.models.results import SimulationResult
+
+
+def build_export_filename(
+    result: SimulationResult,
+    config: SimulationConfig,
+    extension: str,
+) -> str:
+    """Build a descriptive filename encoding key simulation parameters.
+
+    Format: algae_sim_{duration}d_m{start_month}_{depth}m_{surface_area}m2.{ext}
+
+    Args:
+        result: Simulation result (provides duration_days, start_month).
+        config: Simulation configuration (provides depth, surface_area).
+        extension: File extension without dot (e.g. 'csv', 'json').
+
+    Returns:
+        Filename string with embedded simulation parameters for traceability.
+    """
+    return (
+        f"algae_sim_{result.duration_days}d"
+        f"_m{result.start_month}"
+        f"_{config.depth}m"
+        f"_{config.surface_area}m2"
+        f".{extension}"
+    )
+
+
+def prepare_csv_string(
+    result: SimulationResult,
+    config: SimulationConfig,
+) -> str:
+    """Build a CSV string with #-prefixed metadata header and daily data.
+
+    Metadata lines start with '#' so downstream tools can skip them
+    via pd.read_csv(comment='#'). Data rows use csv.writer for proper
+    escaping.
+
+    Args:
+        result: Complete simulation result with daily time-series.
+        config: Simulation configuration for metadata context.
+
+    Returns:
+        Complete CSV string ready for file download.
+    """
+    buf = io.StringIO()
+
+    # -- Metadata header (# prefix for pd.read_csv(comment='#') compat) --
+    buf.write("# AlgaeGrowth Simulator Export\n")
+    buf.write(f"# Species: {result.parameters_used.name}\n")
+    buf.write(
+        f"# Duration: {result.duration_days} days, "
+        f"Start Month: {result.start_month}\n"
+    )
+    buf.write(
+        f"# Pond Depth: {config.depth} m, "
+        f"Surface Area: {config.surface_area} m2\n"
+    )
+    buf.write(f"# CO2 Concentration: {config.co2_concentration} mg/L\n")
+    buf.write(
+        f"# Total CO2 Captured: {result.total_co2_captured_kg:.4f} kg "
+        f"({result.total_co2_captured_tco2e:.6f} tCO2e)\n"
+    )
+    buf.write(
+        f"# Harvests: {result.harvest_count}, "
+        f"Total Biomass Harvested: "
+        f"{result.total_biomass_harvested_kg:.4f} kg\n"
+    )
+    buf.write(
+        f"# Avg Daily Productivity: "
+        f"{result.avg_daily_productivity:.2f} g/m2/day\n"
+    )
+    buf.write("#\n")
+
+    # -- CSV data via csv.writer --
+    writer = csv.writer(buf)
+    writer.writerow([
+        "Day",
+        "Biomass_gL",
+        "Growth_Rate_1d",
+        "Productivity_gm2d",
+        "CO2_Daily_kg",
+        "CO2_Cumulative_gm2",
+    ])
+
+    for i in range(len(result.time_days)):
+        writer.writerow([
+            int(result.time_days[i]),
+            result.biomass_concentration[i],
+            result.growth_rate_daily[i],
+            result.productivity_areal[i],
+            result.co2_captured_daily[i],
+            result.co2_captured_cumulative[i],
+        ])
+
+    return buf.getvalue()
+
+
+def prepare_json_string(
+    result: SimulationResult,
+    config: SimulationConfig,
+) -> str:
+    """Build a JSON string with nested metadata, summary, and daily data.
+
+    Structure:
+        metadata: simulation configuration and species info
+        summary: aggregate results and seasonal breakdown
+        daily_data: list of per-day records
+
+    Args:
+        result: Complete simulation result with daily time-series.
+        config: Simulation configuration for metadata context.
+
+    Returns:
+        Pretty-printed JSON string ready for file download.
+    """
+    season_names = ("dry", "hot", "monsoon")
+
+    data = {
+        "metadata": {
+            "tool": "AlgaeGrowth Simulator",
+            "version": "0.1.0",
+            "species": result.parameters_used.name,
+            "duration_days": result.duration_days,
+            "start_month": result.start_month,
+            "pond_depth_m": config.depth,
+            "surface_area_m2": config.surface_area,
+            "co2_concentration_mgL": config.co2_concentration,
+            "initial_biomass_gL": config.initial_biomass,
+            "harvest_threshold_gL": config.harvest_threshold,
+        },
+        "summary": {
+            "total_co2_captured_kg": result.total_co2_captured_kg,
+            "total_co2_captured_tco2e": result.total_co2_captured_tco2e,
+            "total_biomass_harvested_kg": result.total_biomass_harvested_kg,
+            "harvest_count": result.harvest_count,
+            "avg_daily_productivity_gm2d": result.avg_daily_productivity,
+            "seasonal_co2_kg": {
+                name: result.seasonal_co2[i]
+                for i, name in enumerate(season_names)
+            },
+            "seasonal_productivity_gm2d": {
+                name: result.seasonal_productivity[i]
+                for i, name in enumerate(season_names)
+            },
+        },
+        "daily_data": [
+            {
+                "day": int(result.time_days[i]),
+                "biomass_gL": result.biomass_concentration[i],
+                "growth_rate_1d": result.growth_rate_daily[i],
+                "productivity_gm2d": result.productivity_areal[i],
+                "co2_daily_kg": result.co2_captured_daily[i],
+                "co2_cumulative_gm2": result.co2_captured_cumulative[i],
+            }
+            for i in range(len(result.time_days))
+        ],
+    }
+
+    return json.dumps(data, indent=2)
