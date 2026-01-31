@@ -39,6 +39,28 @@ def display_results(
         config: Simulation configuration for export metadata.
     """
     # ------------------------------------------------------------------
+    # Disclaimer: Estimation tool framing (above all results)
+    # ------------------------------------------------------------------
+    st.info(
+        "**Estimation Tool for Verification Support**\n\n"
+        "This simulator estimates CO\u2082 capture based on peer-reviewed growth models "
+        "and Surat climate data. Results are intended to support carbon credit "
+        "verification applications, not to represent verified carbon credits.\n\n"
+        "**Next Steps for Carbon Credit Verification:**\n"
+        "1. Export your simulation data (CSV/JSON) along with the methodology "
+        "section as supporting documentation\n"
+        "2. Submit to an accredited verification body:\n"
+        "   - **Verra (VCS)**: Largest voluntary carbon market; verification "
+        "under ISO 14065\n"
+        "   - **Gold Standard**: WWF-founded; requires 3+ UN SDG contributions\n"
+        "   - **India CCTS**: Carbon Credit Trading Scheme under BEE; "
+        "voluntary offset expected mid-2026\n"
+        "3. Verification bodies will assess your actual site data against "
+        "these model estimates",
+        icon="\u2139\ufe0f",
+    )
+
+    # ------------------------------------------------------------------
     # Section 1: Summary Metrics
     # ------------------------------------------------------------------
     st.subheader("Simulation Results")
