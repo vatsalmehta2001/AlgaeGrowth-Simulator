@@ -35,6 +35,16 @@ Estimates CO2 captured by open-pond *Chlorella vulgaris* cultivation using Monod
   <img src="docs/diagrams/simulation-flow.svg" alt="Simulation Flow" width="700">
 </p>
 
+## Growth Model
+
+<p align="center">
+  <img src="docs/diagrams/growth-model.svg" alt="Growth Model" width="100%">
+</p>
+
+## Demo
+
+> **Screenshot coming soon** — Deploy to Streamlit Cloud and add live demo link here.
+
 ## Quick Start
 
 ```bash
@@ -54,30 +64,18 @@ Opens at `http://localhost:8501`. Adjust parameters in the sidebar and click **R
 ## Project Structure
 
 ```
-src/
-├── models/
-│   ├── parameters.py        # Frozen dataclasses (SpeciesParams, CityClimate, SimulationConfig)
-│   └── results.py           # SimulationResult (18 fields, hashable for caching)
-├── simulation/
-│   ├── growth.py            # Steele photoinhibition, Monod CO2 kinetics, depth-averaged growth
-│   ├── light.py             # Beer-Lambert attenuation, depth-averaged irradiance
-│   └── engine.py            # Forward Euler integration, harvest logic, CO2 accounting
-├── climate/
-│   ├── temperature.py       # CTMI cardinal temperature response
-│   ├── growth_modifier.py   # Day/night growth integration with photoperiod weighting
-│   ├── loader.py            # YAML loading with Pydantic validation
-│   └── surat.yaml           # 12-month Surat climate profile (DOI-cited)
-├── config/
-│   ├── loader.py            # Species parameter loading with Pydantic validation
-│   └── species_params.yaml  # Chlorella vulgaris kinetic parameters (DOI-cited)
-└── ui/
-    ├── app.py               # Streamlit entry point with @st.cache_data
-    ├── sidebar.py           # 4-section parameter input (species, climate, pond, simulation)
-    ├── results.py           # Metrics, charts, seasonal breakdown, data table, export
-    ├── charts.py            # Plotly biomass and CO2 figures with season bands
-    ├── export.py            # CSV/JSON with metadata headers and disclaimers
-    ├── methodology.py       # LaTeX equations, parameter table, DOI references
-    └── defaults.py          # Constants, validation, climate override builder
+AlgaeGrowth-Simulator/
+├── src/
+│   ├── simulation/          # engine.py, growth.py, light.py
+│   ├── climate/             # temperature.py, growth_modifier.py, loader.py, surat.yaml
+│   ├── models/              # parameters.py (frozen dataclasses), results.py
+│   ├── config/              # species_params.yaml (DOI-cited), loader.py
+│   └── ui/                  # app.py, sidebar.py, results.py, charts.py, export.py
+├── tests/                   # 172 tests across 9 files
+├── docs/diagrams/           # SVG architecture diagrams (beautiful-mermaid)
+├── .streamlit/              # Theme config (green eco theme)
+├── pyproject.toml           # Python 3.12+, dependencies, tool config
+└── LICENSE                  # MIT
 ```
 
 <details>
@@ -124,11 +122,15 @@ Where D_f = 0.5 (lab-to-field discount) and r_m = 0.01/d (maintenance respiratio
 | mu_max | 1.0 | 1/d | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
 | K_s (CO2) | 0.5 | mg/L | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
 | I_opt | 80.0 | umol/m2/s | Razzak et al. (2024) | [10.1016/j.gce.2023.10.004](https://doi.org/10.1016/j.gce.2023.10.004) |
+| r_maintenance | 0.01 | 1/d | General microalgae literature | — |
 | sigma_x | 0.2 | m2/g | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
+| k_bg | 0.5 | 1/m | General open pond literature | — |
 | carbon_content | 0.50 | g_C/g_DW | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
 | CO2:biomass | 1.83 | g_CO2/g_DW | Derived: (44/12) x 0.50 | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
-| discount_factor | 0.50 | - | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
+| discount_factor | 0.50 | — | Schediwy et al. (2019) | [10.1002/elsc.201900107](https://doi.org/10.1002/elsc.201900107) |
+| T_min | 8.0 | C | Conservative lower bound | — |
 | T_opt | 28.0 | C | Converti et al. (2009) | [10.1016/j.cep.2009.03.006](https://doi.org/10.1016/j.cep.2009.03.006) |
+| T_max | 40.0 | C | Converti et al. (2009) | [10.1016/j.cep.2009.03.006](https://doi.org/10.1016/j.cep.2009.03.006) |
 
 ### Key Assumptions
 
