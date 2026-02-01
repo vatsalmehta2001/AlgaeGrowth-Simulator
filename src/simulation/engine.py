@@ -204,8 +204,9 @@ def run_simulation(
 
     for day in range(config.duration_days):
         season = climate.months[day_to_month[day]].season
-        co2_per_season[season] += co2_daily[day]
-        productivity_per_season[season].append(productivity_daily[day])
+        if season in co2_per_season:
+            co2_per_season[season] += co2_daily[day]
+            productivity_per_season[season].append(productivity_daily[day])
 
     seasonal_co2 = tuple(co2_per_season[s] for s in season_order)
     seasonal_productivity = tuple(

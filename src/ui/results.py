@@ -92,19 +92,27 @@ def display_results(
     # ------------------------------------------------------------------
     st.subheader("Seasonal Breakdown")
 
-    season_names = ("Dry (Oct-Feb)", "Hot (Mar-May)", "Monsoon (Jun-Sep)")
-    s_col1, s_col2, s_col3 = st.columns(3, border=True)
+    has_seasonal_data = any(v > 0 for v in result.seasonal_co2)
 
-    for col, name, co2_kg, prod in zip(
-        (s_col1, s_col2, s_col3),
-        season_names,
-        result.seasonal_co2,
-        result.seasonal_productivity,
-    ):
-        with col:
-            st.markdown(f"**{name}**")
-            st.metric("CO2 Captured", f"{co2_kg:.4f} kg")
-            st.metric("Avg Productivity", f"{prod:.1f} g/m2/d")
+    if has_seasonal_data:
+        season_names = ("Dry (Oct-Feb)", "Hot (Mar-May)", "Monsoon (Jun-Sep)")
+        s_col1, s_col2, s_col3 = st.columns(3, border=True)
+
+        for col, name, co2_kg, prod in zip(
+            (s_col1, s_col2, s_col3),
+            season_names,
+            result.seasonal_co2,
+            result.seasonal_productivity,
+        ):
+            with col:
+                st.markdown(f"**{name}**")
+                st.metric("CO2 Captured", f"{co2_kg:.4f} kg")
+                st.metric("Avg Productivity", f"{prod:.1f} g/m2/d")
+    else:
+        st.caption(
+            "Seasonal breakdown is not available when using custom climate "
+            "overrides (uniform values across all months)."
+        )
 
     # ------------------------------------------------------------------
     # Section 3: Daily Data Table

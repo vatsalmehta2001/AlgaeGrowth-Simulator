@@ -7,7 +7,7 @@ Returns a dict of all collected input values plus validation state.
 
 import streamlit as st
 
-from src.models.parameters import CityClimate
+from src.models.parameters import CityClimate, SpeciesParams
 from src.ui.defaults import (
     DEFAULT_CO2_CONCENTRATION,
     DEFAULT_DEPTH,
@@ -21,19 +21,24 @@ from src.ui.defaults import (
 )
 
 
-def render_sidebar(default_climate: CityClimate) -> dict:
+def render_sidebar(default_climate: CityClimate, species: SpeciesParams) -> dict:
     """Render the complete simulation parameter sidebar.
 
-    Creates three collapsible sections for climate, pond, and simulation
-    parameters. Validates inputs and returns all values in a dict.
+    Creates four collapsible sections for species, climate, pond, and
+    simulation parameters. Validates inputs and returns all values in a dict.
 
     Args:
         default_climate: The default Surat CityClimate profile. Used for
             read-only display when override is off, and as the base for
             building overridden climate when override is on.
+        species: Default species parameters loaded from YAML. Used as
+            default values for the species parameter inputs.
 
     Returns:
         Dict with keys:
+            mu_max (float): Max specific growth rate [1/d].
+            ks_co2 (float): Half-saturation constant for CO2 [mg/L].
+            i_opt (float): Optimal light intensity [umol/m2/s].
             surface_area (float): Pond surface area [m2].
             depth (float): Pond depth [m].
             initial_biomass (float): Initial biomass concentration [g/L].
@@ -50,6 +55,39 @@ def render_sidebar(default_climate: CityClimate) -> dict:
 
     with st.sidebar:
         st.header("Simulation Parameters")
+
+        # ---------------------------------------------------------------
+        # Section 0: Species Parameters (collapsed by default)
+        # ---------------------------------------------------------------
+        with st.expander("Species Parameters", expanded=False):
+            st.caption(f"**{species.name}**")
+            mu_max = st.number_input(
+                "μ_max — max growth rate (1/d)",
+                min_value=0.1,
+                max_value=3.0,
+                value=species.growth.mu_max,
+                step=0.1,
+                format="%.2f",
+                key="sp_mu_max",
+            )
+            ks_co2 = st.number_input(
+                "K_s — CO2 half-saturation (mg/L)",
+                min_value=0.01,
+                max_value=10.0,
+                value=species.growth.Ks_co2,
+                step=0.1,
+                format="%.2f",
+                key="sp_ks_co2",
+            )
+            i_opt = st.number_input(
+                "I_opt — optimal light (μmol/m²/s)",
+                min_value=10.0,
+                max_value=500.0,
+                value=species.growth.I_opt,
+                step=10.0,
+                format="%.1f",
+                key="sp_i_opt",
+            )
 
         # ---------------------------------------------------------------
         # Section 1: Climate Settings (collapsed by default)
@@ -234,6 +272,9 @@ def render_sidebar(default_climate: CityClimate) -> dict:
         )
 
     return {
+        "mu_max": mu_max,
+        "ks_co2": ks_co2,
+        "i_opt": i_opt,
         "surface_area": surface_area,
         "depth": depth,
         "initial_biomass": initial_biomass,
