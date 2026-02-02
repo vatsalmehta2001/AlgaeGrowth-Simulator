@@ -51,8 +51,8 @@ Estimates CO2 captured by open-pond *Chlorella vulgaris* cultivation using Monod
 
 ```bash
 # Clone
-git clone https://github.com/vatsalmehta2001/PBR.git
-cd PBR
+git clone https://github.com/vatsalmehta2001/AlgaeGrowth-Simulator.git
+cd AlgaeGrowth-Simulator
 
 # Install dependencies (Python 3.12+)
 pip install -e ".[dev]"
@@ -200,7 +200,7 @@ If you use this simulator in research or verification workflows, please cite:
   title   = {AlgaeGrowth Simulator},
   author  = {Mehta, Vatsal},
   year    = {2026},
-  url     = {https://github.com/vatsalmehta2001/PBR},
+  url     = {https://github.com/vatsalmehta2001/AlgaeGrowth-Simulator},
   note    = {Monod + Steele + CTMI growth model for CO2 capture estimation}
 }
 ```
