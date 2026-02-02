@@ -5,13 +5,13 @@
 [![Tests](https://img.shields.io/badge/tests-172_passing-2E7D32)](#testing)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Peer-reviewed microalgal growth simulation for defensible CO2 capture estimation under Surat, India's tropical climate.**
+**Microalgal growth simulation for defensible CO2 capture estimation under Surat, India's tropical climate.**
 
-## What It Does
+## Goal
 
 The goal of this project is to develop a model of an open pond culture of the algae species Chlorella vulgaris that can be used to estimate carbon sequestration based on Monod's kinetic equations describing algal growth, Steele's equation describing the inhibition of photosynthesis as light intensity increases, and CTMI (Chapman Temperature Model for Inactivation) equations which describe how temperature affects algal growth. All of the model parameters were taken from peer-reviewed articles cited with DOIs to enable reproducibility of the model and verification against the carbon credit standards of Verra, Gold Standard, and India CCTS.
 
-## Key Features
+## Features
 
 - **Monod + Steele growth model** with 20-layer Beer-Lambert depth integration
 - **CTMI cardinal temperature model** with day/night split for Surat's 8-40 C range
